@@ -21,15 +21,14 @@ from data import BodyPart
 from data import Person
 from data import person_from_keypoints_with_scores
 import numpy as np
-import tensorflow as tf
 
 import sys
 
 # pylint: disable=g-import-not-at-top
 try:
   # Import TFLite interpreter from tflite_runtime package if it's available.
-  import tensorflow as tf
-  Interpreter = tf.lite.Interpreter
+  import tflite_runtime.interpreter as tf
+  Interpreter = tf.Interpreter
 except ImportError:
   # If not, fallback to use the TFLite interpreter from the full TF package.
   sys.exit('ERROR: Could not import model.')
