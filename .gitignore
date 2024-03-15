@@ -9,3 +9,7 @@
 /share
 
 pyvenv.cfg
+
+/ml/__pycache__
+
+/bin
