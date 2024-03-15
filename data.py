@@ -121,7 +121,7 @@ def person_from_keypoints_with_scores(
             Point(int(kpts_x[i] * image_width), int(kpts_y[i] * image_height)),
             scores[i]))
 
-  url = 'http://localhost:5000/injectionLocation'
+  url = 'http://localhost:5000/injection_location'
   data = {
     'left_x': int(kpts_x[5] * image_width), 
     'left_y': int(kpts_y[5] * image_height),
