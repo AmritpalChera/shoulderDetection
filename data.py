@@ -18,6 +18,11 @@ from typing import List, NamedTuple
 
 import numpy as np
 
+import requests
+import time
+import json
+
+prev_time = time.time()
 
 class BodyPart(enum.Enum):
   """Enum representing human body keypoints detected by pose estimation models."""
@@ -67,6 +72,17 @@ class Person(NamedTuple):
   id: int = None
 
 
+def delayed_post_request(url, data, delay):
+    global prev_time
+    if (not prev_time or time.time() - prev_time > delay):
+      prev_time = time.time()
+      headers = {'Content-Type': 'application/json'}
+      print('making req \n')
+      response = requests.post(url, data=json.dumps(data), headers=headers)
+      return response
+    
+   
+
 def person_from_keypoints_with_scores(
     keypoints_with_scores: np.ndarray,
     image_height: float,
@@ -94,8 +110,22 @@ def person_from_keypoints_with_scores(
   keypoints = []
   for i in range(scores.shape[0]):
     if (i == 5 or i == 6):
-      if (i ==5):
-        print(f"left point is ({int(kpts_x[i] * image_width)}, {int(kpts_y[i] * image_height)})")
+      # if (i ==5):
+      #   print(f"left point is ({int(kpts_x[i] * image_width)}, {int(kpts_y[i] * image_height)})")
+
+      # if (i ==6):
+      #   print(f"right point is ({int(kpts_x[i] * image_width)}, {int(kpts_y[i] * image_height)})")
+      
+      url = 'http://localhost:5000/injectionLocation'
+      data = {
+        'left_x': int(kpts_x[i] * image_width), 
+        'left_y': {int(kpts_y[i] * image_height)},
+        'right_x': {int(kpts_x[i] * image_width)},
+        'right_y': {int(kpts_y[i] * image_height)}
+        }  # Your JSON data
+      delay = 3  # Delay of 5 seconds
+      response = delayed_post_request(url, data, delay)
+
       keypoints.append(
         KeyPoint(
             BodyPart(i),
