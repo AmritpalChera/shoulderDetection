@@ -22,6 +22,7 @@ import time
 import requests
 import json
 
+prev_time = time.time()
 
 class BodyPart(enum.Enum):
   """Enum representing human body keypoints detected by pose estimation models."""
