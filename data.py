@@ -116,21 +116,23 @@ def person_from_keypoints_with_scores(
       # if (i ==6):
       #   print(f"right point is ({int(kpts_x[i] * image_width)}, {int(kpts_y[i] * image_height)})")
       
-      url = 'http://localhost:5000/injectionLocation'
-      data = {
-        'left_x': int(kpts_x[i] * image_width), 
-        'left_y': {int(kpts_y[i] * image_height)},
-        'right_x': {int(kpts_x[i] * image_width)},
-        'right_y': {int(kpts_y[i] * image_height)}
-        }  # Your JSON data
-      delay = 3  # Delay of 5 seconds
-      response = delayed_post_request(url, data, delay)
+      
 
       keypoints.append(
         KeyPoint(
             BodyPart(i),
             Point(int(kpts_x[i] * image_width), int(kpts_y[i] * image_height)),
             scores[i]))
+    
+  url = 'http://localhost:5000/injectionLocation'
+  data = {
+    'left_x': int(kpts_x[5] * image_width), 
+    'left_y': int(kpts_y[5] * image_height),
+    'right_x': int(kpts_x[6] * image_width),
+    'right_y': int(kpts_y[6] * image_height)
+    }  # Your JSON data
+  delay = 3  # Delay of 5 seconds
+  response = delayed_post_request(url, data, delay)
 
   # Calculate bounding box as SinglePose models don't return bounding box.
   start_point = Point(
